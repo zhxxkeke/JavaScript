@@ -1,10 +1,12 @@
 // ==UserScript==
-// @name         淘宝-快捷指令
-// @namespace    https://bbs.tampermonkey.net.cn/
-// @version      0.1.0
-// @description  淘宝-->已买到的宝贝-->待收货
-// @author       沐琪
+// @name         淘宝-显示物流
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  none
+// @author       沐淇
 // @match        https://buyertrade.taobao.com/trade/itemlist/list_bought_items.htm?action=itemlist/BoughtQueryAction&event_submit_do_query=1&tabCode=waitConfirm
+// @icon         https://img.alicdn.com/favicon.ico
+// @grant        none
 // ==/UserScript==
 
 (function () {
@@ -45,7 +47,7 @@
     // get 请求
     function getRequest(url) {
         return new Promise(function (resolve, reject) {
-            var xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
 
             xhr.onload = function () {
