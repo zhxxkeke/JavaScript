@@ -65,7 +65,7 @@
                 const data = await response.json();
                 const dataList = data.data[0]
                 return {
-                    '售后编号': dataList.product_item.map(i => i['after_sale_info']['after_sale_id']).filter(id => id !== ''),
+                    '售后编号': dataList.product_item.map(i => i.after_sale_info.after_sale_id).filter(id => id !== ''),
                     '卖家备注': dataList.remark
                 }
             } catch (error) {
@@ -105,6 +105,26 @@
         payInput.dispatchEvent(mouseupEvent);
     }
 
+    // 添加备注
+    function addNewRemark(parent, text) {
+        const reg = /(\d+\.\d+\sZHUAN|\bZHUAN\b)/g;
+        const content = text.replace(reg, '<span style="color:#FF7F00;">$&</span>');
+        const element = parent.querySelector('div.index_tableRow__2Okoz.mortise-rich-table-row');
+        if (element.children.length === 2) {
+            const div1 = document.createElement('div');
+            div1.style.display = 'flex';
+            const div2 = document.createElement('div');
+            div2.className = 'index_cell__sscym';
+            div2.style.textAlign = 'left';
+            div2.innerHTML = content;
+            div1.appendChild(div2);
+            element.appendChild(div1);
+        } else {
+            const children = element.lastElementChild;
+            children.querySelector('div.index_cell__sscym').innerHTML = content;
+        }
+    }
+
     // 主函数
     function main() {
         const parent = document.querySelector('#gar-sub-app-provider');
@@ -124,6 +144,14 @@
                         const target = mutation.target;
                         const button = target.querySelector('a');
                         if (button && !count) {
+                            const orderId = match[0];
+                            searchlist(orderId)
+                                .then(result => {
+                                    if (result) {
+                                        const remark = result.卖家备注;
+                                        addNewRemark(parent, remark)
+                                    }
+                                });
                             // 项目表
                             const table = items.querySelectorAll('.index_cellRow__2KCzO');
                             button.addEventListener('click', async function () {
@@ -180,3 +208,4 @@
         reLoad();
     })
 })();
+
